@@ -1,5 +1,5 @@
 
-using BulkyBookWeb.Data;
+using BulkyBook.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
