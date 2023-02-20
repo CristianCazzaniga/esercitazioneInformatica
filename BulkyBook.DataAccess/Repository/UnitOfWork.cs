@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BulkyBook.DataAccess.Repository.IRepository;
+using BulkyBook.Models.Models;
 
-namespace BulkyBook.DataAccess.Repository.IRepository
+namespace BulkyBook.DataAccess.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -13,8 +15,10 @@ namespace BulkyBook.DataAccess.Repository.IRepository
         {
             _db = db;
             Category = new CategoryRepository(_db);
+            CoverType = new CoverTypeRepository(_db);
         }
         public ICategoryRepository Category { get; private set; } = null!;
+        public ICoverTypeRepository CoverType { get; private set; } = null!;
         public void Save()
         {
             _db.SaveChanges();
