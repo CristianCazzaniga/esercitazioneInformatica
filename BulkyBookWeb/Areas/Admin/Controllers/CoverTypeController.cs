@@ -32,6 +32,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 _unitOfWork.CoverType.Add(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "CoverType created successfully";
                 return RedirectToAction(nameof(Index));
             }

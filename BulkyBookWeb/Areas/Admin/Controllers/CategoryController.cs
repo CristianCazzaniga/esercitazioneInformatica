@@ -1,5 +1,6 @@
 ﻿using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.Models;
+using BulkyBook.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -28,6 +29,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category obj)
         {
+            if (obj.Name == obj.DisplayOrder.ToString())
             {
                 ModelState.AddModelError(nameof(obj.Name), $"The name of property {nameof(obj.DisplayOrder)} cannot exactly match the name of property {nameof(obj.Name)}");
             }
