@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Upsert";
 }
-<form method="post" asp-action="Upsert">
+<form method="post" asp-action="Upsert" enctype="multipart/form-data>
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">Edit Product</h2>
@@ -51,15 +51,15 @@
             <span asp-validation-for="Product.Price100" class="text-danger"></span>
         </div>
         <div class="row mb-3">
-
+            <label asp-for="Product.ImageUrl"></label>
+            <input type="file" name="file" class="form-cotrol" id="img" style="display:none;" />
+            <label for="img" class="form-control">Click me to upload image</label>
+        </div>
+        <div class="row mb-3">
             <label asp-for="Product.CategoryId"></label>
-
             <select asp-for="Product.CategoryId" class="form-select" asp-items="@Model.CategoryList">
-
                 <option disabled selected>--Select Category--</option>
-
             </select>
-
             <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
         </div>
         <div class="row mb-3">
