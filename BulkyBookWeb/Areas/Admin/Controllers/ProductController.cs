@@ -2,9 +2,13 @@
 using BulkyBook.Models;
 using BulkyBook.Models.Models;
 using BulkyBook.Models.ViewModels;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace BulkyBookWeb.Areas.Admin.Controllers
@@ -13,15 +17,17 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _hostEnvironment = hostEnvironment;
         }
         //GET
         public IActionResult Index()
         {
-            IEnumerable<CoverType> objCoverTypeList = _unitOfWork.CoverType.GetAll();
-            return View(objCoverTypeList);
+            IEnumerable<Product> objProductList = _unitOfWork.Product.GetAll();
+            return View(objProductList);
         }
         public IActionResult Upsert(int? id)
         {
@@ -56,13 +62,29 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
         [ValidateAntiForgeryToken]
 
-        public IActionResult Upsert(Product obj)
+        public IActionResult Upsert(ProductVM obj, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Update(obj);
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    //creiamo un nuovo nome per il file che l'utente ha caricato
+                    //facciamo in modo che non possano esistere due file con lo stesso nome
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploadDir = Path.Combine(wwwRootPath, "images", "products");
+                    var fileExtension = Path.GetExtension(file.FileName);
+                    var filePath = Path.Combine(uploadDir, fileName + fileExtension);
+                    var fileUrlString = filePath[wwwRootPath.Length..].Replace(@"\\", @"\");
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    obj.Product.ImageUrl = fileUrlString;
+                }
+                _unitOfWork.Product.Add(obj.Product);
                 _unitOfWork.Save();
-                TempData["success"] = "Product updated successfully";
+                TempData["success"] = "Product created successfully";
                 return RedirectToAction(nameof(Index));
             }
             return View(obj);
