@@ -26,8 +26,13 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         //GET
         public IActionResult Index()
         {
-            IEnumerable<Product> objProductList = _unitOfWork.Product.GetAll();
-            return View(objProductList);
+            return View();
+        }
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var productList = _unitOfWork.Product.GetAll();
+            return Json(new { data = productList });
         }
         public IActionResult Upsert(int? id)
         {
