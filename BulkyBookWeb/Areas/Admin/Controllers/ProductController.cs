@@ -162,43 +162,35 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             }
             return View(obj);
         }
-        //GET
-        public IActionResult Delete(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            var coverTypeFromDbFirst = _unitOfWork.CoverType.GetFirstOrDefault(u => u.Id == id);
-            if (coverTypeFromDbFirst == null)
-            {
-                return NotFound();
-            }
-            return View(coverTypeFromDbFirst);
-        }
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(int id, [Bind("Id")] CoverType coverType)
-        {
-            if (id != coverType.Id)
-            {
-                return NotFound();
-            }
-            var coverTypeFromDbFirst = _unitOfWork.CoverType.GetFirstOrDefault(u => u.Id == id);
-            if (coverTypeFromDbFirst == null)
-            {
-                return NotFound();
-            }
-            _unitOfWork.CoverType.Remove(coverTypeFromDbFirst);
-            _unitOfWork.Save();
-            TempData["success"] = "CoverType deleted successfully";
-            return RedirectToAction(nameof(Index));
-        }
         #region API CALLS
         public IActionResult GetAll()
         {
             var productList = _unitOfWork.Product.GetAll(includeProperties: "Category,CoverType");
             return Json(new { data = productList });
+        }
+        [HttpDelete]
+
+        public IActionResult Delete(int? id)
+        {
+            var objFromDbFirst = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
+            if (objFromDbFirst == null)//l'oggetto con l'id specificato non è stato trovato
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+            else //l'oggetto con l'id specificato è stato trovato
+            {
+                if (objFromDbFirst.ImageUrl != null) //l'oggetto ha un ImageUrl!=null
+                {
+                    var oldImagePath = Path.Combine(_hostEnvironment.WebRootPath, objFromDbFirst.ImageUrl.TrimStart(Path.DirectorySeparatorChar));
+                    if (System.IO.File.Exists(oldImagePath))//se il file corrispondente all'ImageUrl esiste va eliminato
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+                _unitOfWork.Product.Remove(objFromDbFirst);
+                _unitOfWork.Save();
+                return Json(new { success = true, message = "Delete Successful" });
+            }
         }
         #endregion
     }
