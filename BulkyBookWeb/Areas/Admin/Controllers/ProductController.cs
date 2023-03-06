@@ -53,14 +53,23 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             };
             if (id == null || id == 0)
             {
-                //create product
+                //restituisce una view per la creazione di un nuovo prodotto
                 return View(productVM);
             }
             else
             {
-                //update product
+                var productInDb = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
+                if (productInDb != null)
+                {
+                    productVM.Product = productInDb;
+                    //restituisce una view per l'aggiornamento del prodotto
+                    //questa view riceve un productVM con tutti i campi di Product
+                    return View(productVM);
+                }
+                //il prodotto con l'id inviato non è stato trovato nel database.
+                //restituisce una view per creare un nuovo prodotto
+                return View(productVM);
             }
-            return View(productVM);
 
         }
         [HttpPost]
