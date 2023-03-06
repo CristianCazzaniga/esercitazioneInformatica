@@ -29,11 +29,6 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult GetAll()
-        {
-            var productList = _unitOfWork.Product.GetAll(includeProperties: "Category,CoverType");
-            return Json(new { data = productList });
-        }
         public IActionResult Upsert(int? id)
         {
 
@@ -199,5 +194,12 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             TempData["success"] = "CoverType deleted successfully";
             return RedirectToAction(nameof(Index));
         }
+        #region API CALLS
+        public IActionResult GetAll()
+        {
+            var productList = _unitOfWork.Product.GetAll(includeProperties: "Category,CoverType");
+            return Json(new { data = productList });
+        }
+        #endregion
     }
 }
