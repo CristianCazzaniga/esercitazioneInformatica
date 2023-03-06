@@ -78,6 +78,8 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
         public IActionResult Upsert(ProductVM obj, IFormFile? file)
         {
+            //se si tratta di un nuovo prodotto --> Id ==0 e ImageUrl==null
+            //se si tratta di un aggiornamento di un prodotto --> Id!=0 e ImageUrl!=null
             if (ModelState.IsValid)
             {
                 string wwwRootPath = _hostEnvironment.WebRootPath;
@@ -88,6 +90,15 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                     string fileName = Guid.NewGuid().ToString();
                     var uploadDir = Path.Combine(wwwRootPath, "images", "products");
                     var fileExtension = Path.GetExtension(file.FileName);
+                    //nel caso di upload dell'immagine del prodotto, il precedente file, se esiste, deve essere rimosso
+                    if (obj.Product.ImageUrl != null)
+                    {
+                        var oldImagePath = Path.Combine(wwwRootPath, obj.Product.ImageUrl.TrimStart(Path.DirectorySeparatorChar));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
                     var filePath = Path.Combine(uploadDir, fileName + fileExtension);
                     var fileUrlString = filePath[wwwRootPath.Length..].Replace(@"\\", @"\");
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -96,9 +107,17 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                     }
                     obj.Product.ImageUrl = fileUrlString;
                 }
-                _unitOfWork.Product.Add(obj.Product);
+                if (obj.Product.Id == 0)//new Product
+                {
+                    _unitOfWork.Product.Add(obj.Product);
+                    TempData["success"] = "Product created successfully";
+                }
+                else //update exsisting Product
+                {
+                    _unitOfWork.Product.Update(obj.Product);
+                    TempData["success"] = "Product updated successfully";
+                }
                 _unitOfWork.Save();
-                TempData["success"] = "Product created successfully";
                 return RedirectToAction(nameof(Index));
             }
             return View(obj);

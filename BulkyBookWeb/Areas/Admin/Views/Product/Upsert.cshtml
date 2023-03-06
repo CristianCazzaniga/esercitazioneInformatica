@@ -9,6 +9,10 @@ E' comunque possibile specificare l'action con il tag asp-action. Questo è quel
 VS'
 *@
 <form method="post" asp-action="Upsert" enctype="multipart/form-data">
+    <input asp-for="Product.Id" hidden />
+    <input asp-for="Product.ImageUrl" hidden />
+    <div class="row">
+        <div class="col-10">
     <div class="border p-3 mt-4 row">
         <div class="row pb-2">
             <h2 class="text-primary">@(Model.Product.Id != 0 ? "Update" : "Create") Product</h2>
@@ -85,6 +89,15 @@ VS'
             <a asp-controller="Product" asp-action="Index" class="btn btn-secondary" style="width:150px">
                 Back to List
             </a>
+        </div>
+    </div>
+        </div>
+        <div class="col-2 pt-2">
+            @if (Model.Product.ImageUrl != null)
+            {
+                <img src="@Model.Product.ImageUrl"
+                 style="width:100%; border-radius:5px; border:1px solid #bbb9b9" />
+            }
         </div>
     </div>
 </form>
