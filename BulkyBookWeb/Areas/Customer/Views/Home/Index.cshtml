@@ -1,61 +1,28 @@
-﻿@model IEnumerable<Product>
-
-@{
+﻿@{
 
     ViewData["Title"] = "Home Page";
 
 }
-
-<div class="row pb-3">
-
-    @foreach (var product in Model)
-
-    {
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="row p-2">
-
-                <div class="col-12 p-1" style="border: 1px solid #008cba; border-radius: 5px">
-
-                    <div class="card">
-
-                        <img src="@product.ImageUrl" class="card-img-top rounded" />
-
-                        <div class="card-body">
-
-                            <div class="pl-1">
-
-                                <p class="card-title h5 text-primary">@product.Title</p>
-
-                                <p class="card-title text-info">by <b>@product.Author</b></p>
-
-                            </div>
-
-                            <div class="pl-1">
-
-                                <p> List Price: <strike><b>@product.ListPrice.ToString("0.00") €</b></strike></p>
-
-                            </div>
-
-                            <div class="pl-1">
-
-                                <p> As low as: <b>@product.Price100.ToString("0.00") €</b></p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <a asp-action="Details" class="btn btn-primary form-control" asp-route-id="@product.Id">Details</a>
-
-                </div>
-
-            </div>
-
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Product List</h2>
         </div>
-
-    }
-
+    </div>
+    <br /><br />
+    <table id="tblData" class="table table-bordered table-striped cards" style="width:100%; ">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>List Price</th>
+                <th>Lowest Price</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
 </div>
+@section Scripts{
+    <script src="~/js/homeProducts.js"></script>
+}
