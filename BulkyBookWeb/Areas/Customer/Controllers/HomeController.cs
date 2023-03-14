@@ -21,7 +21,23 @@ public class HomeController : Controller
     }
     public IActionResult Index()
     {
+        //IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category,CoverType");
+        //return View(productList);
         return View();
+    }
+    public IActionResult Details(int id)
+    {
+        var selectedProductInDb = _unitOfWork.Product.GetFirstOrDefault(product => product.Id == id, "Category,CoverType");
+        if (selectedProductInDb != null)
+        {
+            ShoppingCart cartObj = new()
+            {
+                Count = 1,
+                Product = selectedProductInDb
+            };
+            return View(cartObj);
+        }
+        return RedirectToAction(nameof(Index));
     }
     public IActionResult Privacy()
     {
