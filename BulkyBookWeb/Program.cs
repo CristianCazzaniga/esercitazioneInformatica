@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity;
+
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,8 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
-builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
-
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders().AddEntityFrameworkStores<ApplicationDbContext>();
 //builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 //UnitOfWork si occupa della gestione di tutti i repository
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
