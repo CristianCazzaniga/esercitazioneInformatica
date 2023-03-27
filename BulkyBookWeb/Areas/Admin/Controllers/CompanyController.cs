@@ -40,7 +40,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 var companyInDb = _unitOfWork.Company.GetFirstOrDefault(u => u.Id == id);
                 if (companyInDb != null)
                 {
-                    return View(company);
+                    return View(companyInDb);
                 }
                 //la Company con l'id inviato non è stato trovata nel database.
                 //restituisce una view per creare una nuova Company
