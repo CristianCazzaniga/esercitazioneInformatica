@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace BulkyBook.Models.Models
-
 {
-
     public class ApplicationUser : IdentityUser
     {
         [Required]
@@ -12,5 +12,9 @@ namespace BulkyBook.Models.Models
         public string? City { get; set; }
         public string? State { get; set; }
         public string? PostalCode { get; set; }
+        public int? CompanyId { get; set; }
+        [ForeignKey(nameof(CompanyId))]
+        public Company Company { get; set; } = null!;
     }
+
 }
