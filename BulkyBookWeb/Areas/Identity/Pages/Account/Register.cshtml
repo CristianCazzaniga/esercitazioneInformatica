@@ -18,33 +18,33 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3 py-2 col-6">
-                <input asp-for="Input.Name" class="form-control"  aria-required="true" placeholder="Nome Cognome" />
+                <input asp-for="Input.Name" class="form-control" aria-required="true" placeholder="Nome Cognome" />
                 <label asp-for="Input.Name">Name</label>
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
-            
+
             <div class="form-floating mb-3 py-2 col-6">
-                <input asp-for="Input.PhoneNumber" class="form-control"  aria-required="true" />
+                <input asp-for="Input.PhoneNumber" class="form-control" aria-required="true" />
                 <label asp-for="Input.PhoneNumber">Phone Number</label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3 py-2 col-6">
-                <input asp-for="Input.StreetAddress" class="form-control"  aria-required="true"  />
+                <input asp-for="Input.StreetAddress" class="form-control" aria-required="true" />
                 <label asp-for="Input.StreetAddress">Street Address</label>
                 <span asp-validation-for="Input.StreetAddress" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3 py-2 col-6">
-                <input asp-for="Input.City" class="form-control"  aria-required="true"  />
+                <input asp-for="Input.City" class="form-control" aria-required="true" />
                 <label asp-for="Input.City">City</label>
                 <span asp-validation-for="Input.City" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3 py-2 col-6">
-                <input asp-for="Input.State" class="form-control"  aria-required="true"  />
+                <input asp-for="Input.State" class="form-control" aria-required="true" />
                 <label asp-for="Input.State">State</label>
                 <span asp-validation-for="Input.State" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3 py-2 col-6">
-                <input asp-for="Input.PostalCode" class="form-control"  aria-required="true"  />
+                <input asp-for="Input.PostalCode" class="form-control" aria-required="true" />
                 <label asp-for="Input.PostalCode">Postal Code</label>
                 <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
             </div>
@@ -59,7 +59,7 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3 py-2 col-6">
-                <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select" aria-label="Role" >
+                <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select" aria-label="Role">
                     <option disabled selected>-Select Role-</option>
                 </select>
             </div>
@@ -80,8 +80,10 @@
                 {
                     <div>
                         <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                article
+                                about setting up this ASP.NET application to support logging in via external services
+                            </a>.
                         </p>
                     </div>
                 }
@@ -106,14 +108,14 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        $(document).ready(function(){
-            $('#Input_Role').change(function(){
+        $(document).ready(function () {
+            $('#Input_Role').change(function () {
                 //https://learn.jquery.com/using-jquery-core/faq/how-do-i-get-the-text-value-of-a-selected-option/
                 //https://stackoverflow.com/a/10659117
                 var selection = $('#Input_Role option:selected').val().toLowerCase();
-                if(selection!='company'){
+                if (selection != 'company') {
                     $('#Input_CompanyId').hide();
-                }else{
+                } else {
                     $('#Input_CompanyId').show();
                 }
             })
